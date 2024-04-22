@@ -1,0 +1,23 @@
+import pandas as pd
+import sqlite3
+
+# Create a sample DataFrame
+data = {'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, 30, 35],
+        'Location': ['New York', 'London', 'Paris']}
+df = pd.DataFrame(data)
+
+# Connect to the main SQLite database
+conn_main = sqlite3.connect('main_database.db')
+
+# Attach the second database to the main connection
+conn_main.execute("ATTACH DATABASE 'attached_database.db' AS attached_db")
+
+# Write the DataFrame to a new SQLite table in the attached database
+df.to_sql('table_name', conn_main, if_exists='replace', index=False, schema='attached_db')
+
+# Commit the changes (if using transactions)
+conn_main.commit()
+
+# Close the database connections
+conn_main.close()
