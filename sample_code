@@ -13,7 +13,19 @@ conn_main = sqlite3.connect('main_database.db')
 # Attach the second database to the main connection
 conn_main.execute("ATTACH DATABASE 'attached_database.db' AS attached_db")
 
-# Write the DataFrame to a new SQLite table in the attached database
+# Define the SQL statement to create the table in the attached database
+create_table_sql = """
+CREATE TABLE attached_db.table_name (
+    Name TEXT,
+    Age INTEGER,
+    Location TEXT
+)
+"""
+
+# Execute the table creation SQL statement
+conn_main.execute(create_table_sql)
+
+# Write the DataFrame to the newly created SQLite table in the attached database
 df.to_sql('table_name', conn_main, if_exists='replace', index=False, schema='attached_db')
 
 # Commit the changes (if using transactions)
