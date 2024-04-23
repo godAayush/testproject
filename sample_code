@@ -1,14 +1,17 @@
 import streamlit as st
+import pandas as pd
 
-# Create a button to clear the content
-clear_button = st.button("Clear Content")
+# Sample DataFrame
+data = {'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, 30, 35],
+        'Location': ['New York', 'London', 'Paris']}
+df = pd.DataFrame(data)
 
-# JavaScript code to clear the content
-javascript_code = """
-document.body.innerHTML = '';
-"""
-
-# Check if the button is clicked
-if clear_button:
-    # Execute JavaScript code to clear the content
-    st.write(javascript_code, unsafe_allow_html=True)
+# Display tabular data as buttons
+for index, row in df.iterrows():
+    # Concatenate the row values to create the button label
+    button_label = f"{row['Name']} - Age: {row['Age']}, Location: {row['Location']}"
+    # Display the button
+    if st.button(button_label):
+        # You can add actions when the button is clicked
+        st.write(f"Button {row['Name']} clicked!")
