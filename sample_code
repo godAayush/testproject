@@ -1,36 +1,14 @@
 import streamlit as st
 
-# Define the states of the views
-class ViewState:
-    INITIAL = "initial"
-    SECOND = "second"
+# Create a button to clear the content
+clear_button = st.button("Clear Content")
 
-# Initialize session state
-if "view_state" not in st.session_state:
-    st.session_state.view_state = ViewState.INITIAL
+# JavaScript code to clear the content
+javascript_code = """
+document.body.innerHTML = '';
+"""
 
-def second_view():
-    # Create a text input field in the popup
-    popup_text = st.text_input("Enter your text:")
-
-    # Create a button in the popup
-    if st.button("Submit"):
-        if popup_text:
-            # Trigger the one-time function
-            st.write("Running one-time function with input:", popup_text)
-            # Set view state back to initial
-            st.session_state.view_state = ViewState.INITIAL
-
-# Display the appropriate view based on the current state
-if st.session_state.view_state == ViewState.INITIAL:
-    # Create a button to switch to the second view
-    button_clicked = st.button("Switch to Second View")
-
-    # Check if the button is clicked
-    if button_clicked:
-        # Set view state to second
-        st.session_state.view_state = ViewState.SECOND
-
-elif st.session_state.view_state == ViewState.SECOND:
-    # Display the second view with the popup
-    second_view()
+# Check if the button is clicked
+if clear_button:
+    # Execute JavaScript code to clear the content
+    st.write(javascript_code, unsafe_allow_html=True)
