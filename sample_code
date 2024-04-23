@@ -1,35 +1,36 @@
-import pandas as pd
-import sqlite3
+import streamlit as st
 
-# Create a sample DataFrame
-data = {'Name': ['Alice', 'Bob', 'Charlie'],
-        'Age': [25, 30, 35],
-        'Location': ['New York', 'London', 'Paris']}
-df = pd.DataFrame(data)
+# Define the states of the views
+class ViewState:
+    INITIAL = "initial"
+    SECOND = "second"
 
-# Connect to the main SQLite database
-conn_main = sqlite3.connect('main_database.db')
+# Initialize session state
+if "view_state" not in st.session_state:
+    st.session_state.view_state = ViewState.INITIAL
 
-# Attach the second database to the main connection
-conn_main.execute("ATTACH DATABASE 'attached_database.db' AS attached_db")
+def second_view():
+    # Create a text input field in the popup
+    popup_text = st.text_input("Enter your text:")
 
-# Define the SQL statement to create the table in the attached database
-create_table_sql = """
-CREATE TABLE attached_db.table_name (
-    Name TEXT,
-    Age INTEGER,
-    Location TEXT
-)
-"""
+    # Create a button in the popup
+    if st.button("Submit"):
+        if popup_text:
+            # Trigger the one-time function
+            st.write("Running one-time function with input:", popup_text)
+            # Set view state back to initial
+            st.session_state.view_state = ViewState.INITIAL
 
-# Execute the table creation SQL statement
-conn_main.execute(create_table_sql)
+# Display the appropriate view based on the current state
+if st.session_state.view_state == ViewState.INITIAL:
+    # Create a button to switch to the second view
+    button_clicked = st.button("Switch to Second View")
 
-# Write the DataFrame to the newly created SQLite table in the attached database
-df.to_sql('table_name', conn_main, if_exists='replace', index=False, schema='attached_db')
+    # Check if the button is clicked
+    if button_clicked:
+        # Set view state to second
+        st.session_state.view_state = ViewState.SECOND
 
-# Commit the changes (if using transactions)
-conn_main.commit()
-
-# Close the database connections
-conn_main.close()
+elif st.session_state.view_state == ViewState.SECOND:
+    # Display the second view with the popup
+    second_view()
