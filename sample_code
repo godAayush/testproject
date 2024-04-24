@@ -1,11 +1,17 @@
-import pytz
+import pandas as pd
+from pandas.tseries.offsets import BDay
 from datetime import datetime
 
-# Specify the time zone you want to get the current date and time for
-desired_timezone = 'America/New_York'  # For example, New York time
+# Example date
+date1 = datetime.now().date()
 
-# Get the current date and time in the desired time zone
-current_time = datetime.now(pytz.timezone(desired_timezone))
+# Define the number of business days to go back
+business_days = 5
 
-# Print the current date and time
-print("Current date and time in", desired_timezone, ":", current_time)
+# Create a DatetimeIndex with the range of dates
+date_range = pd.date_range(end=date1, periods=business_days, freq=BDay())
+
+# Convert DatetimeIndex to list of dates
+business_dates = date_range.to_pydatetime().tolist()
+
+print("Business dates:", business_dates)
