@@ -1,17 +1,11 @@
-import streamlit as st
-import pandas as pd
+import pytz
+from datetime import datetime
 
-# Sample DataFrame
-data = {'Name': ['Alice', 'Bob', 'Charlie'],
-        'Age': [25, 30, 35],
-        'Location': ['New York', 'London', 'Paris']}
-df = pd.DataFrame(data)
+# Specify the time zone you want to get the current date and time for
+desired_timezone = 'America/New_York'  # For example, New York time
 
-# Display tabular data as buttons
-for index, row in df.iterrows():
-    # Concatenate the row values to create the button label
-    button_label = f"{row['Name']} - Age: {row['Age']}, Location: {row['Location']}"
-    # Display the button
-    if st.button(button_label):
-        # You can add actions when the button is clicked
-        st.write(f"Button {row['Name']} clicked!")
+# Get the current date and time in the desired time zone
+current_time = datetime.now(pytz.timezone(desired_timezone))
+
+# Print the current date and time
+print("Current date and time in", desired_timezone, ":", current_time)
