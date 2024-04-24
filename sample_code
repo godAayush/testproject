@@ -1,17 +1,16 @@
-import pandas as pd
-from pandas.tseries.offsets import BDay
-from datetime import datetime
+import re
 
-# Example date
-date1 = datetime.now().date()
+def is_valid_format(input_string):
+    # Define the regex pattern to match "5b" format
+    pattern = r'^\d+b$'  # ^ : start of string, \d+ : one or more digits, b : literal 'b', $ : end of string
+    
+    # Use re.match to check if the input string matches the pattern
+    match = re.match(pattern, input_string)
+    
+    # Return True if there is a match, False otherwise
+    return match is not None
 
-# Define the number of business days to go back
-business_days = 5
-
-# Create a DatetimeIndex with the range of dates
-date_range = pd.date_range(end=date1, periods=business_days, freq=BDay())
-
-# Convert DatetimeIndex to list of dates
-business_dates = date_range.to_pydatetime().tolist()
-
-print("Business dates:", business_dates)
+# Test the function
+test_strings = ["5b", "10b", "123b", "b5", "5", "5c", "b5c"]
+for test_string in test_strings:
+    print(f"{test_string}: {is_valid_format(test_string)}")
